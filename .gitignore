@@ -1,3 +1,9 @@
+# File of mdk
+mdk_project
+
+# Files of vscode
+.vscode
+
 # Prerequisites
 *.d
 
