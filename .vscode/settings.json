@@ -1,0 +1,45 @@
+{
+    "astyle.c.enable": true,
+    "astyle.cpp.enable": true,
+    "astyle.executable": "E:\\Location_Software\\AStyle\\bin\\Astyle.exe",
+    "astyle.cmd_options": [
+        "--style=linux",
+
+        "--indent=spaces=4",
+        "--indent-cases",
+        "--indent-continuation=3",
+        "--indent-labels",
+        "--indent-preproc-block",
+        "--indent-preproc-define",
+        "--indent-col1-comments",
+
+        "--min-conditional-indent=0",
+        "--max-continuation-indent=120",
+        "--max-code-length=80",
+
+        "--break-blocks",
+
+        "--pad-oper",
+        "--pad-comma",
+        "--pad-paren-in",
+
+        "--delete-empty-lines",
+
+        "--align-pointer=name",
+
+        "--break-closing-braces",
+
+        "--add-braces",
+
+        "--convert-tabs",
+
+        "--suffix=none",
+        "--unpad-paren"
+    ],
+    "files.associations": {
+        "tm1650.h": "c"
+    },
+    "licenser.author": "Zheng Hua(writeforever@foxmail.com)",
+    "licenser.projectName": "SDOL",
+    "licenser.license": "LGPLv3"
+}
