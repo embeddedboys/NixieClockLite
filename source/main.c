@@ -66,20 +66,22 @@ void SystemInit()
     my_tm1650_opr.init();
 }
 
-void Delay1000ms()      //@11.0592MHz
+void Delay1000ms()		//@24.000MHz
 {
-    unsigned char i, j, k;
-    i = 57;
-    j = 27;
-    k = 112;
+	unsigned char i, j, k;
 
-    do {
-        do {
-            while( --k );
-        }
-        while( --j );
-    }
-    while( --i );
+	_nop_();
+	_nop_();
+	i = 122;
+	j = 193;
+	k = 128;
+	do
+	{
+		do
+		{
+			while (--k);
+		} while (--j);
+	} while (--i);
 }
 
 /**
