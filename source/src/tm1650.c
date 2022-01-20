@@ -42,7 +42,7 @@ static uint8_t tm1650_read_key()
 {
     uint8_t byte;
     
-    Fgpio_i2c_start();
+    gpio_i2c_start();
     gpio_i2c_sendbyte( TM1650_COMMAND_READ_KEY );
     gpio_i2c_revack();
     byte = gpio_i2c_readbyte();
