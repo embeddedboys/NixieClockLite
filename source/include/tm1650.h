@@ -40,15 +40,14 @@
 /*********************
  *  GLOBAL VARIABLE
  *********************/
-// const unsigned char code tm1650_segment_value[2] = {
-//  0xfe, /* 0 */
-//  0x60, /* 1 */
-
-// };
 
 /**********************
 *      TYPEDEFS
 **********************/
+
+/**
+ * @brief TM1650控制结构体
+ */
 typedef struct {
 
     float temperature;
@@ -57,19 +56,26 @@ typedef struct {
 
 } tm1650_handle_t;
 
+/**
+ * @brief TM1650配置结构体
+ */
 typedef union {
     struct {
         uint8_t power : 3;
         uint8_t segment_format : 1;
         uint8_t brightness : 4;
     } display_register;
-    uint8_t full;
 
+    uint8_t full;
 } tm1650_config_t;
 
 /**********************
 *      ENUMS
 **********************/
+
+/**
+ * @brief TM1650辉度级别
+ */
 typedef enum {
 
     TM1650_BRIGHTNESS_LEVEL_8 = 0,
@@ -82,6 +88,10 @@ typedef enum {
     TM1650_BRIGHTNESS_LEVEL_7 = 7,
 
 } tm1650_brightness_level_t;
+
+/**
+ * @brief TM1650数码管显示状态
+ */
 typedef enum {
 
     TM1650_DISPLAY_POWER_OFF = 0,
@@ -89,6 +99,9 @@ typedef enum {
 
 } tm1650_display_power_t;
 
+/**
+ * @brief TM1650数码管段格式
+ */
 typedef enum {
 
     TM1650_SEGMENT_FORMAT_8 = 0,
@@ -96,6 +109,9 @@ typedef enum {
 
 } tm1650_segment_format_t;
 
+/**
+ * @brief TM1650数码管位号
+ */
 typedef enum {
 
     TM1650_BIT_1 = 0x68,
@@ -105,6 +121,9 @@ typedef enum {
 
 } tm1650_bit_selection_t;
 
+/**
+ * @brief TM1650段码值（共阴极数码管）
+ */
 typedef enum {
 
     TM1650_SEGMENT_VALUE_0 = 0x3f, /* `0` */
@@ -119,6 +138,7 @@ typedef enum {
     TM1650_SEGMENT_VALUE_9 = 0x6f, /* `9` */
 
 } tm1650_segment_value_t;
+
 /**********************
 *      STRUCT
 **********************/
@@ -127,7 +147,7 @@ struct tm1650_operations {
     void ( *init )();
     void ( *deinit )();
 
-    void ( *write_register )( uint8_t addr, uint8_t dat );
+    void ( *write_register )( uint8_t command, uint8_t dat );
 
     void ( *set_brightness )( tm1650_brightness_level_t level );
     void ( *set_display )( tm1650_display_power_t state );
