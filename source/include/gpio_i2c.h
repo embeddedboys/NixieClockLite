@@ -22,26 +22,24 @@
 *      INCLUDES
 *********************/
 #ifndef STCMCU_H
-#include "stcmcu.h"
+    #include "stcmcu.h"
 #endif
 
 /*********************
  *      DEFINES
  *********************/
-sbit GPIO_I2C_SCL = P3 ^ 6;
-sbit GPIO_I2C_SDA = P3 ^ 7;
+sbit GPIO_I2C_SCL = P3 ^ 2;
+sbit GPIO_I2C_SDA = P3 ^ 3;
 
 
 /**********************
 *      TYPEDEFS
 **********************/
-typedef struct
-{
+typedef struct {
     uint8_t lock;
 } gpio_i2c_handle_t;
 
-typedef struct
-{
+typedef struct {
     uint32_t speed;
 } gpio_i2c_config_t;
 
@@ -59,7 +57,7 @@ void gpio_i2c_sndack();
 void gpio_i2c_sndnack();
 void gpio_i2c_stop();
 uint8_t gpio_i2c_readbyte();
-void gpio_i2c_sendbyte(uint8_t byte_in);
+void gpio_i2c_sendbyte( uint8_t byte_in );
 
 /**********************
 *      MACROS
