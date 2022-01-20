@@ -31,11 +31,25 @@ static tm1650_config_t __mTM1650_config = {0};
 static void tm1650_write_register( uint8_t command, uint8_t dat )
 {
     gpio_i2c_start();
-    gpio_i2c_sendbyte( command );  //slave address
+    gpio_i2c_sendbyte( command ); //slave address
     gpio_i2c_revack();
     gpio_i2c_sendbyte( dat );
     gpio_i2c_revack();
     gpio_i2c_stop();
+}
+
+static uint8_t tm1650_read_key()
+{
+    uint8_t byte;
+    
+    Fgpio_i2c_start();
+    gpio_i2c_sendbyte( TM1650_COMMAND_READ_KEY );
+    gpio_i2c_revack();
+    byte = gpio_i2c_readbyte();
+    gpio_i2c_revack();
+    gpio_i2c_stop();
+    
+    return byte;    
 }
 
 /**
@@ -132,6 +146,7 @@ void register_tm1650_operations( struct tm1650_operations *opr )
 {
     opr->init = tm1650_init;
     opr->write_register = tm1650_write_register;
+    opr->read_key = tm1650_read_key;
     opr->set_brightness = tm1650_set_brightness;
     opr->set_display = tm1650_set_display;
     opr->set_segment_format = tm1650_set_segment_format;

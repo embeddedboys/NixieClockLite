@@ -36,6 +36,7 @@
  *      DEFINES
  *********************/
 #define TM1650_DISPLAY_REG 0x48
+#define TM1650_COMMAND_READ_KEY 0x49
 
 /*********************
  *  GLOBAL VARIABLE
@@ -53,7 +54,7 @@ typedef struct {
     float temperature;
     float humidity;
     uint8_t checksum;
-
+    
 } tm1650_handle_t;
 
 /**
@@ -65,7 +66,7 @@ typedef union {
         uint8_t segment_format : 1;
         uint8_t brightness : 4;
     } display_register;
-
+    
     uint8_t full;
 } tm1650_config_t;
 
@@ -86,7 +87,7 @@ typedef enum {
     TM1650_BRIGHTNESS_LEVEL_5 = 5,
     TM1650_BRIGHTNESS_LEVEL_6 = 6,
     TM1650_BRIGHTNESS_LEVEL_7 = 7,
-
+    
 } tm1650_brightness_level_t;
 
 /**
@@ -96,7 +97,7 @@ typedef enum {
 
     TM1650_DISPLAY_POWER_OFF = 0,
     TM1650_DISPLAY_POWER_ON = 1,
-
+    
 } tm1650_display_power_t;
 
 /**
@@ -106,7 +107,7 @@ typedef enum {
 
     TM1650_SEGMENT_FORMAT_8 = 0,
     TM1650_SEGMENT_FORMAT_7 = 1,
-
+    
 } tm1650_segment_format_t;
 
 /**
@@ -118,7 +119,7 @@ typedef enum {
     TM1650_BIT_2 = 0x6a,
     TM1650_BIT_3 = 0x6c,
     TM1650_BIT_4 = 0x6e,
-
+    
 } tm1650_bit_selection_t;
 
 /**
@@ -136,7 +137,7 @@ typedef enum {
     TM1650_SEGMENT_VALUE_7 = 0x07, /* `7` */
     TM1650_SEGMENT_VALUE_8 = 0x7f, /* `8` */
     TM1650_SEGMENT_VALUE_9 = 0x6f, /* `9` */
-
+    
 } tm1650_segment_value_t;
 
 /**********************
@@ -146,15 +147,17 @@ struct tm1650_operations {
 
     void ( *init )();
     void ( *deinit )();
-
+    
     void ( *write_register )( uint8_t command, uint8_t dat );
-
+    
     void ( *set_brightness )( tm1650_brightness_level_t level );
     void ( *set_display )( tm1650_display_power_t state );
     void ( *set_segment_format )( tm1650_segment_format_t format );
-
+    
     void ( *show_bit )( tm1650_bit_selection_t which,
                         tm1650_segment_value_t value );
+
+    uint8_t ( *read_key )();
 };
 
 /**********************
