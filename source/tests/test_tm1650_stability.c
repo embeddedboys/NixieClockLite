@@ -48,26 +48,9 @@ void SystemInit()
     P4M1 = 0x00;
     P5M0 = 0x00;
     P5M1 = 0x00;
+    
     register_tm1650_operations( &my_tm1650_opr );
     my_tm1650_opr.init();
-}
-
-void Delay1000ms()      //@24.000MHz
-{
-    unsigned char i, j, k;
-    _nop_();
-    _nop_();
-    i = 122;
-    j = 193;
-    k = 128;
-
-    do {
-        do {
-            while( --k );
-        }
-        while( --j );
-    }
-    while( --i );
 }
 
 void Timer2_Isr() interrupt 12
@@ -78,12 +61,12 @@ void Timer2_Isr() interrupt 12
     }
 }
 
-void Timer2Init(void)		//10毫秒@23.894MMHz
+void Timer2Init( void )     //10毫秒@23.894MMHz
 {
-	AUXR &= 0xFB;		//定时器时钟12T模式
-	T2L = 0x38;		//设置定时初始值
-	T2H = 0xB2;		//设置定时初始值
-	AUXR |= 0x10;		//定时器2开始计时
+    AUXR &= 0xFB;       //定时器时钟12T模式
+    T2L = 0x38;     //设置定时初始值
+    T2H = 0xB2;     //设置定时初始值
+    AUXR |= 0x10;       //定时器2开始计时
     IE2 = 0x04;
     EA = 1;
 }
@@ -97,28 +80,65 @@ void Timer2Init(void)		//10毫秒@23.894MMHz
 int main( void )
 {
     uint8_t loop = 1;
+    // uint8_t key_in = 0;
+    
     SystemInit();
-    // Timer2Init();
+    Timer2Init();
+    
     my_tm1650_opr.set_brightness( TM1650_BRIGHTNESS_LEVEL_8 );
     my_tm1650_opr.show_bit( TM1650_BIT_1, TM1650_SEGMENT_VALUE_0 );
     my_tm1650_opr.show_bit( TM1650_BIT_2, TM1650_SEGMENT_VALUE_0 );
     my_tm1650_opr.show_bit( TM1650_BIT_3, TM1650_SEGMENT_VALUE_0 );
     my_tm1650_opr.show_bit( TM1650_BIT_4, TM1650_SEGMENT_VALUE_0 );
-
-    while( loop ) {
+    
+    // while( loop ) {
+    //     key_in = my_tm1650_opr.read_key();
+    
+    //     switch( key_in )
+    //     {
+    //     case 0x47:
+    //         my_tm1650_opr.show_bit( TM1650_BIT_4, tm1650_segment_value[4] );
+    //         break;
+    
+    //     case 0x46:
+    //         my_tm1650_opr.show_bit( TM1650_BIT_3, tm1650_segment_value[3] );
+    //         break;
+    
+    //     case 0x45:
+    //         my_tm1650_opr.show_bit( TM1650_BIT_2, tm1650_segment_value[2] );
+    //         break;
+    
+    //     case 0x44:
+    //         my_tm1650_opr.show_bit( TM1650_BIT_1, tm1650_segment_value[1] );
+    //         break;
+    
+    //     default:
+    //         my_tm1650_opr.show_bit( TM1650_BIT_1,
+    //                                 tm1650_segment_value[( ( key_in & 0xf0 ) >> 4 ) / 10] );
+    //         my_tm1650_opr.show_bit( TM1650_BIT_2,
+    //                                 tm1650_segment_value[( ( key_in & 0xf0 ) >> 4 ) % 10] );
+    //         my_tm1650_opr.show_bit( TM1650_BIT_3,
+    //                                 tm1650_segment_value[( key_in & 0x0f ) / 10] );
+    //         my_tm1650_opr.show_bit( TM1650_BIT_4,
+    //                                 tm1650_segment_value[( key_in & 0x0f ) % 10] );
+    //         break;
+    //     }
+    
+    while( loop )
+    {
         if( nCount / 1000 > 9 ) {
             nCount = 0;
         }
         else {
             my_tm1650_opr.show_bit( TM1650_BIT_1, tm1650_segment_value[nCount / 1000] );
         }
-
+        
         my_tm1650_opr.show_bit( TM1650_BIT_2, tm1650_segment_value[nCount / 100 % 10] );
         my_tm1650_opr.show_bit( TM1650_BIT_3, tm1650_segment_value[nCount / 10 % 10] );
         my_tm1650_opr.show_bit( TM1650_BIT_4, tm1650_segment_value[nCount % 10] );
-
         
     }
-
+    
+    
     return 0;
 }
