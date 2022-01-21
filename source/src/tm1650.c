@@ -22,8 +22,8 @@ static tm1650_config_t __mTM1650_config = {0};
 /**
  * @brief TM1650写寄存器函数
  *
- * TM1650使用非标准I2C协议，需要直接发送命令+数据，
- * 没有设备地址概念，使用gpio管脚模拟时序。
+ * TM1650可使用gpio管脚模拟时序。亦可使用I2C控制器，
+ * 但都需要直接发送命令+数据或显存地址+数据，
  *
  * @param command 需要发送的命令
  * @param dat     需要发送的数据
@@ -40,7 +40,7 @@ static void tm1650_write_register( uint8_t command, uint8_t dat )
 
 static uint8_t tm1650_read_key()
 {
-    uint8_t byte;
+    uint8_t byte=0x00;
     
     gpio_i2c_start();
     gpio_i2c_sendbyte( TM1650_COMMAND_READ_KEY );
