@@ -48,30 +48,38 @@ void gpio_i2c_init()
 {
     /* set config */
     __gpio_i2c_set_scl( 0 );
-    __gpio_i2c_set_sda( 0 );
+    __gpio_i2c_set_sda( 1 );
 }
 
 void gpio_i2c_start()
 {
-    __gpio_i2c_set_sda( 0 );
     __gpio_i2c_set_scl( 1 );
+
+    delay();
+    __gpio_i2c_set_sda( 1 );
+    __gpio_i2c_set_sda( 0 );
+    delay();
+
     __gpio_i2c_set_scl( 0 );
 }
 
 void gpio_i2c_stop()
 {
     __gpio_i2c_set_scl( 1 );
+
     __gpio_i2c_set_sda( 0 );
     __gpio_i2c_set_sda( 1 );
+    delay();
+
+    __gpio_i2c_set_scl( 0 );
 }
 
 uint8_t gpio_i2c_revack()
 {
-    uint8_t val_ack = 1;
     __gpio_i2c_set_scl( 1 );
+    delay();
     __gpio_i2c_set_scl( 0 );
-    val_ack = __gpio_i2c_get_sda();
-    return val_ack;
+    return __gpio_i2c_get_sda();
 }
 
 void gpio_i2c_sndack()
@@ -107,8 +115,11 @@ void gpio_i2c_sendbyte( uint8_t byte_in )
 
     for( i = 0; i < 8; i++ ) {
         __gpio_i2c_set_sda( ( byte_in & 0x80 ) ? 1 : 0 );
+        delay();
         __gpio_i2c_set_scl( 1 );
+        delay();
         __gpio_i2c_set_scl( 0 );
         byte_in <<= 1;
     }
+    __gpio_i2c_set_sda( 0 );
 }
