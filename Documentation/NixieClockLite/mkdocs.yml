@@ -1,0 +1,11 @@
+site_name: Nixie Clock Lite
+theme:
+  name: mkdocs
+nav:
+    - Home: index.md
+    - 'User Guide':
+      - 'How to Use?': notice.md
+    - Notice: notice.md
+    - About: 
+        - 'License': about.md
+        - 'Release Notes': about.md
