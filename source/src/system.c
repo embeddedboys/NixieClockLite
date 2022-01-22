@@ -1,31 +1,33 @@
 /**
- * Copyright (C) 2021 jensenhua(writeforever@foxmail.com)
- *
- * This file is part of sdol.
- *
- * sdol is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * sdol is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with sdol.  If not, see <http://www.gnu.org/licenses/>.
+ * @file system.c
+ * @author Zheng hua (writeforever@foxmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2022-01-22
+ * 
+ * Copyright 2022 Zheng Hua(writeforever@foxmail.com)
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
+ * (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
+ * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+ * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ * DEALINGS IN THE SOFTWARE.
+ * 
  */
-
 
 #include "system.h"
 
 /**
-* @description
-*
-* @param
-* @return
-*/
+ * @brief 
+ * 
+ */
 void system_init()
 {
     CKSEL = 0x00;   /* Chosen inside high precision IRC */
@@ -35,11 +37,10 @@ void system_init()
 }
 
 /**
-* @description
-*
-* @param
-* @return
-*/
+ * @brief 
+ * 
+ * @param reset_type 
+ */
 void system_reset( uint8_t reset_type )
 {
     iap_contr *con;
@@ -64,8 +65,8 @@ void system_reset( uint8_t reset_type )
 }
 
 /**
- * @brief
- *
+ * @brief 
+ * 
  */
 void system_wdt_init()
 {
@@ -82,10 +83,10 @@ void system_wdt_init()
 }
 
 /**
- * @brief set the mode of given pin
- *
- * @param gp group and pin
- * @param mode pin IO mode
+ * @brief 
+ * 
+ * @param gp 
+ * @param mode 
  */
 void __system_io_mode( grp_pin_t gp, uint8_t mode )
 {
@@ -120,11 +121,10 @@ void __system_io_mode( grp_pin_t gp, uint8_t mode )
 }
 
 /**
-* @description
-*
-* @param
-* @return
-*/
+ * @brief 
+ * 
+ * @param iomux_type 
+ */
 void system_iomux( uint8_t iomux_type )
 {
     switch( iomux_type ) {
@@ -143,11 +143,10 @@ void system_iomux( uint8_t iomux_type )
 }
 
 /**
-* @description
-*
-* @param
-* @return
-*/
+ * @brief 
+ * 
+ * @param opr 
+ */
 void register_system_operations( struct system_operations *opr )
 {
     opr->init = system_init;
