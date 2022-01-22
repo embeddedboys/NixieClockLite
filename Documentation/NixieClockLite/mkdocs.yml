@@ -2,10 +2,11 @@ site_name: Nixie Clock Lite
 theme:
   name: mkdocs
 nav:
-    - Home: index.md
-    - 'User Guide':
-      - 'How to Use?': notice.md
-    - Notice: notice.md
-    - About: 
-        - 'License': about.md
-        - 'Release Notes': about.md
+    - 主页: index.md
+    - '用户向导':
+      - '如何使用?': howtouse.md
+    - 开发者: developer.md
+    - 关于: 
+        - '作者': authors.md
+        - '许可证': license.md
+        - '发行说明': releasenote.md
