@@ -32,7 +32,8 @@
         "stcmcu.h": "c",
         "system.h": "c",
         "stc8_keil.h": "c",
-        "gpio_i2c.h": "c"
+        "gpio_i2c.h": "c",
+        "ds1302.h": "c"
     },
     "licenser.author": "Zheng Hua(writeforever@foxmail.com)",
     "licenser.projectName": "SDOL",
