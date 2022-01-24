@@ -75,7 +75,7 @@ static uint8_t __ds1302_get_dat()
  *
  * @param val pin state to set
  */
-static void __ds1302_set_rst( uint8_t val )
+void __ds1302_set_rst( uint8_t val )
 {
     if( val ) {
         DS1302_RST = 1;
@@ -90,7 +90,7 @@ static void __ds1302_set_rst( uint8_t val )
  *
  * @param byte_in
  */
-static void __ds1302_writebyte( uint8_t byte_in )
+void __ds1302_writebyte( uint8_t byte_in )
 {
     int i;
 
