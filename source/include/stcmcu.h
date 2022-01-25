@@ -46,6 +46,19 @@
 /*********************
  *      DEFINES
  *********************/
+/* cost 416ns in STC8G 24MHz IRC */
+#define delay() do { \
+    _nop_();         \
+    _nop_();         \
+    _nop_();         \
+    _nop_();         \
+    _nop_();         \
+    _nop_();         \
+    _nop_();         \
+    _nop_();         \
+    _nop_();         \
+    _nop_();         \
+}while(0);
 
 /**********************
 *      TYPEDEFS
