@@ -31,9 +31,11 @@
 
 #include "ds1302.h"
 #include "tm1650.h"
+#include "uart.h"
 
 static struct ds1302_operations nMyDs1302Opr;
 static struct tm1650_operations nMyTm1650Opr;
+static struct uart_operations nMyUartOpr;
 static uint16_t nCount = 0;
 static uint16_t nInterruptCount = 0;
 const unsigned char tm1650_segment_value[10] = {
@@ -79,6 +81,9 @@ void SystemInit()
     
     register_tm1650_operations( &nMyTm1650Opr );
     nMyTm1650Opr.init();
+
+    register_uart_operations(&nMyUartOpr);
+    nMyUartOpr.fast_init();
 }
 
 void Timer2_Isr() interrupt 12
@@ -118,22 +123,23 @@ void main( void )
     
     SystemInit();
     
-    // nMyDs1302Opr.write_register( 0x80, 0x05 );
+    nMyDs1302Opr.write_register( 0x80, 0x05 );
 
     while( loop ) {
         // __ds1302_set_rst(1);
         // __ds1302_writebyte(0x82);
         // __ds1302_writebyte(0x11);
         // __ds1302_set_rst(0);
-        byte_read = nMyDs1302Opr.read_register( 0xBF );
+        byte_read = nMyDs1302Opr.read_register( 0x81 );
+
         nMyTm1650Opr.show_bit( TM1650_BIT_4,
                                tm1650_segment_value[( byte_read & 0x0f )] );
         nMyTm1650Opr.show_bit( TM1650_BIT_3,
                                tm1650_segment_value[( byte_read & 0x70 ) >> 4] );
-                               
-        disp = !disp;
-        nMyTm1650Opr.show_bit( TM1650_BIT_1,
-                               tm1650_segment_value[( disp ) ? 1 : 0] );
+        SBUF = 'A';            
+        // disp = !disp;
+        // nMyTm1650Opr.show_bit( TM1650_BIT_1,
+        //                        tm1650_segment_value[( disp ) ? 1 : 0] );
         Delay1000ms();
     }
 }
