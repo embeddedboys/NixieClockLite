@@ -1,24 +1,24 @@
 /**
  * @file stcmcu.h
  * @author Zheng Hua (writeforever@foxmail.com)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2022-01-22
- * 
+ *
  * MIT License
- * 
+ *
  * Copyright 2022 Zheng Hua(writeforever@foxmail.com)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +26,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- * 
+ *
  */
 
 #ifndef __STCMCU_H
@@ -48,17 +48,17 @@
  *********************/
 /* cost 416ns in STC8G 24MHz IRC */
 #define delay() do { \
-    _nop_();         \
-    _nop_();         \
-    _nop_();         \
-    _nop_();         \
-    _nop_();         \
-    _nop_();         \
-    _nop_();         \
-    _nop_();         \
-    _nop_();         \
-    _nop_();         \
-}while(0);
+        _nop_();         \
+        _nop_();         \
+        _nop_();         \
+        _nop_();         \
+        _nop_();         \
+        _nop_();         \
+        _nop_();         \
+        _nop_();         \
+        _nop_();         \
+        _nop_();         \
+    }while(0);
 
 /**********************
 *      TYPEDEFS
@@ -72,6 +72,39 @@ typedef unsigned short  uint16_t;
 typedef unsigned int    uint32_t;
 
 typedef uint8_t grp_pin_t;
+
+typedef union
+{
+    /* Address : 0x8e */
+    struct {
+        uint8_t S1ST2     : 1;
+        uint8_t EXTRAM    : 1;
+        uint8_t T2x12     : 1;
+        uint8_t T2_C_T    : 1;
+        uint8_t T2R       : 1;
+        uint8_t UART_M0x6 : 1;
+        uint8_t T1x12     : 1;
+        uint8_t T0x12     : 1;
+    } reg;
+    
+    uint8_t full;
+} stcmcu_register_AUXR_t;
+
+typedef union
+{
+    struct {
+        uint8_t S1ST2     : 1;
+        uint8_t EXTRAM    : 1;
+        uint8_t T2x12     : 1;
+        uint8_t T2_C_T    : 1;
+        uint8_t T2R       : 1;
+        uint8_t UART_M0x6 : 1;
+        uint8_t T1_C_T     : 1;
+        uint8_t T1_GATE     : 1;
+    }reg;
+
+    uint8_t full;
+}stcmcu_register_TMOD_t;
 
 /**********************
 * GLOBAL PROTOTYPES
