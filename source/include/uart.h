@@ -42,6 +42,9 @@
 /*********************
 *      INCLUDES
 *********************/
+#include <stdarg.h>
+#include <stdlib.h>
+
 #ifndef STCMCU_H
     #include "stcmcu.h"
 #endif
@@ -54,11 +57,21 @@ struct uart_operations
     void ( *init )( uint8_t which );
     void (*fast_init)();
     void ( *deinit )( uint8_t which );
+
+    void (*open_port)(uint8_t port);
+    void (*close_port)(uint8_t port);
+
+    uint8_t (*read_port)(uint8_t fd, uint8_t *buf, uint32_t size);
+	uint8_t (*write_port)(uint8_t fd, uint8_t *buf, uint32_t size);
+	uint8_t (*set_port)(uint8_t fd, struct uart_config *conf);
+	uint8_t (*set_baud_rate)(struct termios *options, const uint32_t baud_rate);
+	uint8_t (*set_data_length)(struct termios *options, const uint8_t data_length);
+
     
-    void ( *putchar )( int chr );
+    void ( *putchar )( int c );
+    void (*puts)(const char *s);
     
-    void ( *print )( char *str, ... );
-    void ( *println )( char *str, ... );
+    void ( *printf )( const char *format, ... );
 };
 
 /*********************
@@ -78,6 +91,23 @@ typedef enum {
 /**********************
 *      TYPEDEFS
 **********************/
+typedef struct
+{
+    char *uart_name;
+    uart_enum_t port;
+
+    uint32_t baud_rate;
+    uint8_t data_bit;
+    uint8_t pairty;
+
+    uint8_t busy;
+    char msg_buf[16];
+    uint16_t rd_index;
+    uint16_t wr_index;
+    uint32_t timeout;
+    
+}uart_handle_t;
+
 typedef union
 {
     /* Address : 0x98 */
@@ -115,6 +145,7 @@ typedef union
 /**********************
 * GLOBAL PROTOTYPES
 **********************/
+void help(void);
 void register_uart_operations( struct uart_operations *opr );
 
 #endif
