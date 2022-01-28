@@ -92,13 +92,14 @@ typedef union
 
 typedef union
 {
+    /* Address : 0x89 */
     struct {
-        uint8_t S1ST2     : 1;
-        uint8_t EXTRAM    : 1;
-        uint8_t T2x12     : 1;
-        uint8_t T2_C_T    : 1;
-        uint8_t T2R       : 1;
-        uint8_t UART_M0x6 : 1;
+        uint8_t T0_M0     : 1;
+        uint8_t T0_M1    : 1;
+        uint8_t T0_C_T     : 1;
+        uint8_t T0_GATE    : 1;
+        uint8_t T1_M0       : 1;
+        uint8_t T1_M1 : 1;
         uint8_t T1_C_T     : 1;
         uint8_t T1_GATE     : 1;
     }reg;
@@ -111,16 +112,18 @@ typedef union
 **********************/
 
 typedef union {
+    /* Address :  */
     struct {
-        uint8_t wdt_ps  : 3;
+        uint8_t WDT_PS  : 3;
         uint8_t idl_wdt : 1;
         uint8_t clr_wdt : 1;
         uint8_t en_wdt  : 1;
         uint8_t unused  : 1;
         uint8_t wdt_flag: 1;
-    } ch;
+    } reg;
+
     uint8_t full;
-} wdt_contr;
+} stcmcu_register_WDT_CONTR_t;
 
 
 
