@@ -68,7 +68,8 @@ void SystemInit()
     P5M1 = 0x00;
     
     register_uart_operations( &nMyUartOpr );
-    nMyUartOpr.fast_init();
+    // nMyUartOpr.fast_init();
+    nMyUartOpr.init(UART_1);
 
     ES=1;
     EA=1;
