@@ -69,11 +69,18 @@ struct uart_operations
 
     
     void ( *putchar )( int c );
-    void (*puts)(const char *s);
+    void (*puts)(const char *str);
     
     void ( *printf )( const char *format, ... );
 };
 
+struct uart_msg {
+    uint8_t *buf;
+    uint32_t size;
+    uint32_t len;
+#define UART_F_RD 0x01
+    uint8_t  flag;
+};
 /*********************
  *      DEFINES
  *********************/
@@ -104,8 +111,8 @@ typedef struct
     char msg_buf[16];
     uint16_t rd_index;
     uint16_t wr_index;
-    uint32_t timeout;
     
+    struct uart_operations *ops;
 }uart_handle_t;
 
 typedef union

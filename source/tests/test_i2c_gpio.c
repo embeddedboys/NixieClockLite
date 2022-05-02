@@ -80,6 +80,15 @@ void Delay1000ms()		//@24.000MHz
 	} while (--i);
 }
 
+void i2c_detect()
+{
+    uint32_t addr = 0x00;
+
+    for(addr;addr<0xff;addr++){
+        
+    }
+}
+
 void main( void )
 {
     SystemInit();

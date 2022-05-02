@@ -31,10 +31,11 @@
 
 #include "uart.h"
 
-static bit busy;
+static bit busy = 0;
 static char ringbuffer[16];
 static uint8_t rd_index;
 static uint8_t wr_index;
+static struct uart_handle_t *g_uart_handle;
 
 static void uart_init( uint8_t which )
 {
@@ -135,6 +136,34 @@ static void set_hardware_flow_control(uart_handle_t *handle, uint8_t enable)
 
 }
 
+static void uart_xfer(uart_handle_t *handle, struct uart_msg *msgs, uint8_t num)
+{
+    uint32_t i;
+    for (i = 0; i < num; i++) {
+        while (busy);
+        busy = 1;
+        if(msgs[i].flag & UART_F_RD) {
+            msgs[i].buf = SBUF;
+        }else{
+            SBUF = msgs[i].buf;
+        }
+    }
+}
+
+static void uart_putchar(int c)
+{
+    while( busy );
+    
+    busy = 1;
+    SBUF = dat;
+}
+
+static void uart_puts(const char *str)
+{
+    while( *str ) {
+        uart_putchar(*str++);
+    }
+}
 
 
 void register_uart_operations( struct uart_operations *opr )
@@ -142,4 +171,18 @@ void register_uart_operations( struct uart_operations *opr )
     opr->init = uart_init;
     opr->fast_init = uart_fast_init;
     opr->deinit = uart_deinit;
+}
+
+void Uart1_Isr() interrupt 4
+{
+    if( TI ) {
+        TI = 0;
+        busy = 0;
+    }
+    
+    if( RI ) {
+        RI = 0;
+        recv_buf[wptr++] = SBUF;
+        wptr &= 0x0f;
+    }
 }

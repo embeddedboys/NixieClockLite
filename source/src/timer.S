@@ -10,3 +10,4 @@ _timer0_init:
 	SETB	ET0
 	SETB	EA
 	
+END
