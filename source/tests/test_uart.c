@@ -37,11 +37,6 @@ static struct uart_operations nMyUartOpr;
 static uint16_t nCount = 0;
 static uint16_t nInterruptCount = 0;
 
-char wptr = 0;
-char rptr = 0;
-bit busy = 0;
-char recv_buf[16];
-
 void Timer2Init( void )     //10毫秒@23.894MMHz
 {
     AUXR &= 0xFB;       //定时器时钟12T模式
@@ -104,48 +99,10 @@ void Delay1000ms()      //@24.000MHz
     while( --i );
 }
 
-void Uart1_Isr() interrupt 4
-{
-    if( TI ) {
-        TI = 0;
-        busy = 0;
-    }
-    
-    if( RI ) {
-        RI = 0;
-        recv_buf[wptr++] = SBUF;
-        wptr &= 0x0f;
-    }
-}
 
-void UartSend( char dat )
-{
-    while( busy );
-    
-    busy = 1;
-    SBUF = dat;
-}
-
-void UartSendStr( char *str )
-{
-    while( *str ) {
-        UartSend(*str++);
-    }
-}
 
 void main( void )
 {
     uint8_t loop = 1;
     
-    SystemInit();
-    UartSendStr("Uart Test!\r\n");
-    UartSendStr("Starting...!\r\n");
-
-    while( loop ) {
-        if(rptr != wptr)
-        {
-            UartSend(recv_buf[rptr++]);
-            rptr &= 0x0f;
-        }
-    }
 }

@@ -24,24 +24,11 @@
 
 #include "stcmcu.h"
 #include "system.h" /* opreations of system */
-#include "ds1302.h"
-#include "tm1650.h"
+#include "uart.h"
+#include "i2c-slave.h"
 
 static struct system_operations my_sys_opr;
-static struct ds1302_operations my_ds1302_opr;
-static struct tm1650_operations my_tm1650_opr;
-const unsigned char tm1650_segment_value[10] = {
-    0x3f, /* `0` */
-    0x06, /* `1` */
-    0x5b, /* `2` */
-    0x4f, /* `3` */
-    0x66, /* `4` */
-    0x6d, /* `5` */
-    0x7d, /* `6` */
-    0x07, /* `7` */
-    0x7f, /* `8` */
-    0x6f, /* `9` */
-};
+static struct uart_operations my_uart_opr;
 
 /**
  * @biref all initialization operations for mcu and device.
@@ -60,15 +47,18 @@ void SystemInit()
     P4M1 = 0x00;
     P5M0 = 0x00;
     P5M1 = 0x00;
-    /* register driver of system*/
-    // register_system_operations(&my_sys_opr);
-    // my_sys_opr.iomux(P32P33_I2C);
 
-    /* register driver of ds1302 */
-    register_ds1302_operations( &my_ds1302_opr );
-    my_ds1302_opr.init();
-    register_tm1650_operations( &my_tm1650_opr );
-    my_tm1650_opr.init();
+    /* register driver of system*/
+    register_system_operations(&my_sys_opr);
+    my_sys_opr.iomux(P32P33_I2C);
+
+	register_uart_operations(&my_uart_opr);
+	my_uart_opr.fast_init();
+
+	i2c_slave_init();
+
+	ES=1;
+    EA=1;
 }
 
 void Delay1000ms()		//@24.000MHz
@@ -96,35 +86,34 @@ void Delay1000ms()		//@24.000MHz
 */
 int main( void )
 {
-    uint8_t ten, biz, res;
+	static int count = 0;
+	char *pbuf;
+
     SystemInit();
-    my_tm1650_opr.set_brightness( TM1650_BRIGHTNESS_LEVEL_8 );
-    my_tm1650_opr.show_bit( TM1650_BIT_1, tm1650_segment_value[1] );
-    my_tm1650_opr.show_bit( TM1650_BIT_2, TM1650_SEGMENT_VALUE_2 );
-    my_tm1650_opr.show_bit( TM1650_BIT_3, TM1650_SEGMENT_VALUE_3 );
-    my_tm1650_opr.show_bit( TM1650_BIT_4, TM1650_SEGMENT_VALUE_4 );
-    // my_ds1302_opr.write_register( 0x80, 0x00 );
-    // Delay1000ms();
-    // my_ds1302_opr.write_register( 0x82, 0x00 );
-    // Delay1000ms();
-    // my_ds1302_opr.write_register( 0x84, 0x00 );
 
-    // while( 1 ) {
-    //     res = my_ds1302_opr.read_register(0x85);
-    //     ten = (res & 0x10) >> 4;
-    //     biz = (res & 0x0f);
-    //     my_tm1650_opr.show_bit(TM1650_BIT_1, tm1650_segment_value[ten]);
-    //     my_tm1650_opr.show_bit(TM1650_BIT_2, tm1650_segment_value[biz]);
+	while(1) {
+		/*
+		my_uart_opr.puts("Hello, World!");
+		my_uart_opr.putchar('0'+count);
+		my_uart_opr.puts("\r\n");
+		*/
 
+		pbuf = i2c_slave_get_buf();
 
-    //     res = my_ds1302_opr.read_register(0x83);
-    //     ten = (res & 0xf0) >> 4;
-    //     biz = (res & 0x0f);
-    //     my_tm1650_opr.show_bit(TM1650_BIT_3, tm1650_segment_value[ten]);
-    //     my_tm1650_opr.show_bit(TM1650_BIT_4, tm1650_segment_value[biz]);
-    //     Delay1000ms();
-    //     Delay1000ms();
-    // }
+		/*
+		my_uart_opr.putchar(pbuf[0]);
+		my_uart_opr.putchar(pbuf[1]);
+		my_uart_opr.putchar(pbuf[2]);
+		my_uart_opr.putchar(pbuf[3]);
+		*/
+
+		my_uart_opr.puts(pbuf);
+		
+		count++;
+		if(count>9)
+			count=0;
+		Delay1000ms();
+	}
 
     return 0;
 }

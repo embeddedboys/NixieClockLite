@@ -68,8 +68,10 @@ struct uart_operations
 	uint8_t (*set_data_length)(struct termios *options, const uint8_t data_length);
 
     
-    void ( *putchar )( int c );
+    void ( *putchar )( char c );
     void (*puts)(const char *str);
+
+	char *(*gets)();
     
     void ( *printf )( const char *format, ... );
 };

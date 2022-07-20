@@ -42,13 +42,13 @@ int32_t simple_atoi( uint8_t s[] )
 
     return n;
 }
-
+/*
 uint8_t simple_itoa( uint8_t n )
 {
     n = 10;
     return 0;
 }
-
+*/
 uint8_t simple_lower( uint8_t c )
 {
     if( c >= 'A' && c <= 'Z' ) {

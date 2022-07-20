@@ -37,6 +37,10 @@ static uint8_t rd_index;
 static uint8_t wr_index;
 static struct uart_handle_t *g_uart_handle;
 
+char wptr = 0;
+char rptr = 0;
+char recv_buf[16];
+
 static void uart_init( uint8_t which )
 {
     uart_register_scon_t scon = {0};
@@ -99,6 +103,9 @@ static void uart_init( uint8_t which )
     
 }
 
+/**
+ * 115200bps
+ */
 static void uart_fast_init()
 {
     SCON  = 0x50;        //8位数据,可变波特率
@@ -152,7 +159,7 @@ static void uart_xfer(uart_handle_t *handle, struct uart_msg *msgs, uint8_t num)
 	*/
 }
 
-static void uart_putchar(int c)
+static void uart_putchar(char c)
 {
     while( busy );
     
@@ -162,9 +169,20 @@ static void uart_putchar(int c)
 
 static void uart_puts(const char *str)
 {
-    while( *str ) {
-        uart_putchar(*str++);
+	unsigned char *tmp = str;
+    while( *tmp ) {
+        uart_putchar(*tmp++);
     }
+}
+
+static void uart_get()
+{
+
+}
+
+static char* uart_gets()
+{
+	return recv_buf;
 }
 
 
@@ -173,6 +191,24 @@ void register_uart_operations( struct uart_operations *opr )
     opr->init = uart_init;
     opr->fast_init = uart_fast_init;
     opr->deinit = uart_deinit;
+	opr->putchar = uart_putchar;
+	opr->puts = uart_puts;
+	opr->gets = uart_gets;
+}
+
+void UartSend( char dat )
+{
+    while( busy );
+    
+    busy = 1;
+    SBUF = dat;
+}
+
+void UartSendStr( char *str )
+{
+    while( *str ) {
+        UartSend(*str++);
+    }
 }
 
 void Uart1_Isr() interrupt 4
@@ -184,9 +220,7 @@ void Uart1_Isr() interrupt 4
     
     if( RI ) {
         RI = 0;
-			/*
         recv_buf[wptr++] = SBUF;
         wptr &= 0x0f;
-			*/
     }
 }
