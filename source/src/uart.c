@@ -138,6 +138,7 @@ static void set_hardware_flow_control(uart_handle_t *handle, uint8_t enable)
 
 static void uart_xfer(uart_handle_t *handle, struct uart_msg *msgs, uint8_t num)
 {
+	/*
     uint32_t i;
     for (i = 0; i < num; i++) {
         while (busy);
@@ -148,6 +149,7 @@ static void uart_xfer(uart_handle_t *handle, struct uart_msg *msgs, uint8_t num)
             SBUF = msgs[i].buf;
         }
     }
+	*/
 }
 
 static void uart_putchar(int c)
@@ -155,7 +157,7 @@ static void uart_putchar(int c)
     while( busy );
     
     busy = 1;
-    SBUF = dat;
+    SBUF = c;
 }
 
 static void uart_puts(const char *str)
@@ -182,7 +184,9 @@ void Uart1_Isr() interrupt 4
     
     if( RI ) {
         RI = 0;
+			/*
         recv_buf[wptr++] = SBUF;
         wptr &= 0x0f;
+			*/
     }
 }
